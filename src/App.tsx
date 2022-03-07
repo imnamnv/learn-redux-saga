@@ -1,12 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
+import { Button } from '@material-ui/core';
+import cityApi from 'api/cityApi';
+import { useAppDispatch } from 'app/hooks';
+import { NotFound, PrivateRoute } from 'components/Common';
+import { Admin } from 'components/Layout';
+import LoginPage from 'features/auth/pages/LoginPage';
+import React, { useEffect } from 'react';
+import { Route, Switch } from 'react-router-dom';
 import './App.css';
+import { authActions } from './features/auth/authSlice';
 
 function App() {
+  const dispath = useAppDispatch();
+  useEffect(() => {
+    // cityApi.getAll().then((data) => {
+    //   console.log('data', data);
+    // });
+  });
+
+  const handleLogout = () => {
+    dispath(authActions.logout());
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
+    <div>
+      <>
+        {/* <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <Counter />
         <p>
@@ -50,7 +68,20 @@ function App() {
             React Redux
           </a>
         </span>
-      </header>
+      </header> */}
+      </>
+
+      <Switch>
+        <Route path="/login">
+          <LoginPage />
+        </Route>
+        <PrivateRoute path="/admin">
+          <Admin />
+        </PrivateRoute>
+        <Route path="/">
+          <NotFound />
+        </Route>
+      </Switch>
     </div>
   );
 }
