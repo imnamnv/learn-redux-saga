@@ -20,3 +20,20 @@ auth
 
 - authSlice: Login, logout
 - authSaga
+
+### Student feature
+
+- Routing:
+  /admin/student: List student
+  /admin/student/add: add student
+  /admin/student/:studentId: update student
+
+- Component:
+  AddEdit Page
+  List Page
+
+- Redux Store:
+  Loading
+  List Student
+  Filter
+  Pagination
