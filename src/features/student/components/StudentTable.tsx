@@ -8,16 +8,17 @@ import {
   TableHead,
   TableRow,
 } from '@material-ui/core';
-import { Student } from 'models';
+import { City, Student } from 'models';
 import { capitalizeString, getMarkColor } from 'utils';
 
 type Props = {
   studentList: Student[];
+  cityMap: { [key: string]: City };
   onEdit?: (student: Student) => void;
   onRemove?: (student: Student) => void;
 };
 
-const StudentTable = ({ studentList, onEdit, onRemove }: Props) => {
+const StudentTable = ({ studentList, cityMap, onEdit, onRemove }: Props) => {
   return (
     <TableContainer>
       <Table size="small" aria-label="simple table">
@@ -46,7 +47,7 @@ const StudentTable = ({ studentList, onEdit, onRemove }: Props) => {
                 </Box>
               </TableCell>
               <TableCell>{capitalizeString(student.gender)}</TableCell>
-              <TableCell>{student.city}</TableCell>
+              <TableCell>{cityMap[student.city]?.name}</TableCell>
               <TableCell align="right">
                 <Button
                   color="primary"
