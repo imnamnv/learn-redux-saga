@@ -51,6 +51,9 @@ export const Admin = (props: AdminProps) => {
           <Route path={'/admin/students'}>
             <StudentFeature />
           </Route>
+          <Route path={'/admin'}>
+            <Dashboard />
+          </Route>
         </Switch>
       </Box>
     </Box>

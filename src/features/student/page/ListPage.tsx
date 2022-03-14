@@ -10,11 +10,10 @@ import {
   studentActions,
 } from '../studentSlice';
 import { Pagination } from '@material-ui/lab';
-import { selectCityMap } from 'features/city/citySlice';
+import { selectCityMap, selectCityList } from 'features/city/citySlice';
 import StudentFilters from '../components/StudentFilters';
-import { ListParams } from 'models';
-
-type Props = {};
+import { ListParams, Student } from 'models';
+import studentApi from 'api/studentApi';
 
 const useStyle = makeStyles((theme) => ({
   root: {
@@ -36,20 +35,19 @@ const useStyle = makeStyles((theme) => ({
   },
 }));
 
-const ListPage = (props: Props) => {
+const ListPage = () => {
   const classes = useStyle();
 
   const studentList = useAppSelector(selectStudentList);
   const pagination = useAppSelector(selectStudentPagination);
   const filter = useAppSelector(selectStudentFilter);
   const loading = useAppSelector(selectStudentLoading);
-
+  const cityList = useAppSelector(selectCityList);
   const cityMap = useAppSelector(selectCityMap);
 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    console.log('filter', filter);
     dispatch(studentActions.fetchStudentList(filter));
   }, [dispatch, filter]);
 
@@ -65,6 +63,21 @@ const ListPage = (props: Props) => {
   const handleSearchChange = (newFilter: ListParams) => {
     dispatch(studentActions.setFilterWithDebounce(newFilter));
   };
+
+  const handleFilterChange = (newFilter: ListParams) => {
+    dispatch(studentActions.setFilter(newFilter));
+  };
+
+  const handleRemoveStudent = async (student: Student) => {
+    console.log('student', student);
+    try {
+      await studentApi.delete(student.id || '');
+      dispatch(studentActions.fetchStudentList({ ...filter }));
+    } catch (error) {
+      console.log('error', error);
+    }
+  };
+
   return (
     <Box className={classes.root}>
       {loading && <LinearProgress className={classes.loading} />}
@@ -76,10 +89,15 @@ const ListPage = (props: Props) => {
       </Box>
 
       <Box mt={3}>
-        <StudentFilters filter={filter} onSearchChange={handleSearchChange} />
+        <StudentFilters
+          filter={filter}
+          cityList={cityList}
+          onChange={handleFilterChange}
+          onSearchChange={handleSearchChange}
+        />
       </Box>
 
-      <StudentTable cityMap={cityMap} studentList={studentList} />
+      <StudentTable cityMap={cityMap} studentList={studentList} onRemove={handleRemoveStudent} />
 
       <Box display="flex" justifyContent="center" mt={2}>
         <Pagination
