@@ -16,15 +16,17 @@ export const InputField = ({ name, control, label, ...inputProps }: InputFieldPr
 
   return (
     <TextField
+      fullWidth
       label={label}
       variant="outlined"
       value={value}
       onChange={onChange}
       onBlur={onBlur}
       inputRef={ref}
-      error={!isValid}
-      helperText={errors.message}
+      error={!isValid && errors[name]?.message}
+      helperText={errors[name]?.message}
       inputProps={inputProps}
+      style={{ marginTop: 10 }}
     />
   );
 };

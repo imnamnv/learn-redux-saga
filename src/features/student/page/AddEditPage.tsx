@@ -6,6 +6,8 @@ import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import StudentForm from '../components/StudentForm';
 
+import yup from 'yup';
+
 type Props = {};
 
 const AddEditPage = (props: Props) => {
@@ -32,8 +34,14 @@ const AddEditPage = (props: Props) => {
     ...student,
   } as Student;
 
-  const handleStudentFormSubmit = (formValue: Student) => {
+  const handleStudentFormSubmit = async (formValue: Student) => {
     console.log('formValue', formValue);
+
+    if (isEdit) {
+      await studentApi.update(formValue);
+    } else {
+      await studentApi.add(formValue);
+    }
   };
 
   return (

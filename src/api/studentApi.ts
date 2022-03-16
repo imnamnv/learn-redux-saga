@@ -19,8 +19,8 @@ const studentApi = {
     return axiosClient.post(url, student);
   },
 
-  update(student: Student): Promise<Student> {
-    const url = '/students';
+  update(student: Partial<Student>): Promise<Student> {
+    const url = `/students/${student.id}`;
     return axiosClient.patch(url, student);
   },
 
